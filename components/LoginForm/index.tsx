@@ -26,10 +26,7 @@ const LoginForm = () => {
           Login to your TempoTrack account
         </h1>
         <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="email" className="block text-sm font-bold">
             Email
           </label>
           <input
@@ -41,10 +38,7 @@ const LoginForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="password" className="block text-sm font-bold">
             Password
           </label>
           <input

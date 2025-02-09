@@ -5,8 +5,8 @@ import "./index.css";
 const Login = () => {
   return (
     <div>
-      <TopNavigation />
-      <main className="element" style={{ height: "calc(100vh - 60px)" }}>
+      <TopNavigation displayText="Register" />
+      <main className="login-bg" style={{ height: "calc(100vh - 60px)" }}>
         <LoginForm />
       </main>
     </div>

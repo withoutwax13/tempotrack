@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const TopNavigation = () => {
+const TopNavigation = (props: { displayText?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -66,16 +66,16 @@ const TopNavigation = () => {
             <div className="button-group mt-4 md:mt-0 md:ml-4">
               <Link
                 href={
-                  window.location.pathname === "/login" ? "/register" : "/login"
+                  !props.displayText
+                    ? "/login"
+                    : props.displayText === "Login"
+                    ? "/login"
+                    : "/register"
                 }
                 style={{ backgroundColor: "#2EA2F8" }}
                 className="text-white py-2 px-4 rounded"
               >
-                {window.location.pathname === "/login"
-                  ? "Register"
-                  : window.location.pathname === "/register"
-                  ? "Login"
-                  : "Login/Register"}
+                {props.displayText || "Login"}
               </Link>
             </div>
           </ul>
