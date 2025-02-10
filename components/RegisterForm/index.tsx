@@ -1,4 +1,6 @@
 "use client";
+import axios from "axios";
+import supabase from "@/services/supabaseClient";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -8,7 +10,18 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [termsConditionsAgreed, setTermsConditionsAgreed] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSyncToPublicUsers = async (user_id: string, username: string) => {
+    axios
+      .post("/api/users", { user_id, username })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        window.location.href = "/login";
+      });
+  };
+
+  const handleSubmit = async () => {
     if (!email || !password || !username) {
       alert("Please fill all the fields");
     } else if (password.length < 6) {
@@ -18,7 +31,22 @@ const RegisterForm = () => {
     } else if (!termsConditionsAgreed) {
       alert("Please agree to the terms and conditions");
     } else {
-      alert("Login successful");
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      const { user } = data;
+
+      if (error) {
+        alert(error.message);
+      } else {
+        if (user?.id) {
+          handleSyncToPublicUsers(user.id, username);
+        } else {
+          alert("An error occurred. Please contact support.");
+        }
+      }
     }
   };
 
@@ -130,7 +158,7 @@ const RegisterForm = () => {
               className="w-full text-white py-2 px-4 rounded-md"
               onClick={handleSubmit}
             >
-              Login
+              Register
             </button>
           </div>
           <p className="text-center text-sm text-gray-600">
