@@ -1,4 +1,5 @@
 "use client";
+import supabase from "@/services/supabaseClient";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -7,7 +8,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [isRememberDevice, setIsRememberDevice] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!email || !password) {
       alert("Please fill all the fields");
     } else if (password.length < 6) {
@@ -15,7 +16,19 @@ const LoginForm = () => {
     } else if (!email.includes("@") || !email.includes(".")) {
       alert("Please enter a valid email address");
     } else {
-      alert("Login successful");
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        alert(error.message);
+      } else {
+        if (data.user.id) {
+          window.location.href = "/calendar";
+        } else {
+          alert("Invalid email or password");
+        }
+      }
     }
   };
 
