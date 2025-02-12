@@ -11,7 +11,7 @@ const Login = () => {
   useEffect(() => {
     async function fetchUser() {
       const { data: user } = await supabase.auth.getUser();
-      if (user) {
+      if (user?.user) {
         window.location.replace("/calendar");
       } else {
         setIsLoading(false);
