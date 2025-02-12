@@ -5,6 +5,7 @@ import supabase from "@/services/supabaseClient";
 
 const primaryNavItems = [
   { name: "Dashboard", url: "/dashboard" },
+  { name: "Budget", url: "/budget" },
   { name: "Calendar", url: "/calendar" },
   { name: "Reports", url: "/reports" },
   { name: "Templates", url: "/templates" },
