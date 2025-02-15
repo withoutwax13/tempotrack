@@ -3,25 +3,40 @@ import supabase from "../../../services/supabaseClient";
 
 export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("id");
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: "Missing id parameter" },
-      { status: 400 }
-    );
-  }
-
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("user_id", userId);
-
-  if (error) {
-    console.error(error.message);
-    return NextResponse.json({ error: error.message }, { status: 404 });
+  const id = searchParams.get("id");
+  const user_id = searchParams.get("user_id");
+  if (!id && !user_id) {
+    const { data, error } = await supabase.from("users").select("*");
+    if (error) {
+      console.error(error.message);
+      return NextResponse.json({ error: error.message }, { status: 404 });
+    } else {
+      return NextResponse.json(data);
+    }
+  } else if (id) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", id);
+    if (error) {
+      console.error(error.message);
+      return NextResponse.json({ error: error.message }, { status: 404 });
+    } else {
+      return NextResponse.json(data);
+    }
+  } else if (user_id) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("user_id", user_id);
+    if (error) {
+      console.error(error.message);
+      return NextResponse.json({ error: error.message }, { status: 404 });
+    } else {
+      return NextResponse.json(data);
+    }
   } else {
-    return NextResponse.json(data);
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 };
 
