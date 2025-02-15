@@ -7,4 +7,5 @@ export interface BudgetType {
   end_date: string;
   timerange: string;
   total_hours: number;
+  tags: string[];
 }

@@ -145,3 +145,68 @@ export const POST = async (req: Request) => {
     }
   }
 };
+
+export const PATCH = async (req: Request) => {
+  const body = await req.json();
+  const {
+    id,
+    name,
+    description,
+    timerange,
+    start_date,
+    end_date,
+    tags,
+    total_hours,
+    status,
+  } = body;
+  const allowedStatus = ["active", "draft", "closed"];
+  if (!id) {
+    return NextResponse.json(
+      { error: "Missing id in request body" },
+      { status: 400 }
+    );
+  }
+  if (!allowedStatus.includes(status)) {
+    return NextResponse.json(
+      { error: "Invalid status in request body" },
+      { status: 400 }
+    );
+  }
+  const { data, error } = await supabase
+    .from("budgets")
+    .update({
+      name: name,
+      description: description,
+      timerange: timerange,
+      start_date: start_date,
+      end_date: end_date,
+      tags: tags,
+      total_hours: total_hours,
+      status: status,
+    })
+    .eq("id", id);
+  if (error) {
+    console.error(error.message);
+    return NextResponse.json(error.message);
+  } else {
+    return NextResponse.json(data);
+  }
+};
+
+export const DELETE = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  if (!id) {
+    return NextResponse.json(
+      { error: "Missing id in request body" },
+      { status: 400 }
+    );
+  }
+  const { data, error } = await supabase.from("budgets").delete().eq("id", id);
+  if (error) {
+    console.error(error.message);
+    return NextResponse.json(error.message);
+  } else {
+    return NextResponse.json(data);
+  }
+};
